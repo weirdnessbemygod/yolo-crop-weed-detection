@@ -6,7 +6,7 @@
 
 Detecção de plantas cultivadas e plantas daninhas com YOLO e Python.
 
-Projeto acadêmico desenvolvido no contexto do FarmTech360, na FIAP.
+Projeto acadêmico em equipe · componente de visão computacional
 
 </div>
 
@@ -14,9 +14,11 @@ Projeto acadêmico desenvolvido no contexto do FarmTech360, na FIAP.
 
 O detector identifica duas classes em imagens agrícolas, `crop` (planta cultivada) e `weed` (planta daninha). A proposta é apoiar a inspeção visual de áreas de cultivo, destacando as regiões detectadas e apresentando a quantidade de ocorrências por classe.
 
-Este repositório apresenta minha contribuição de visão computacional ao FarmTech360, desenvolvido em equipe. O notebook reúne dois experimentos com modelos treinados separadamente e resultados de teste registrados.
+**Deméter é um nome fictício utilizado nesta apresentação.** O trabalho foi desenvolvido em equipe para uma disciplina de graduação. O contexto é uma solução acadêmica para apoiar a inspeção de plantas cultivadas e daninhas em imagens agrícolas. Minha responsabilidade foi desenvolver o componente de visão computacional e entregar o modelo à equipe.
 
-[**Explorar o notebook**](notebooks/FarmTech360_YOLO.ipynb) · [**Abrir no Google Colab**](https://colab.research.google.com/github/weirdnessbemygod/yolo-crop-weed-detection/blob/main/notebooks/FarmTech360_YOLO.ipynb)
+O notebook reúne dois experimentos com modelos treinados separadamente e resultados de teste registrados.
+
+[**Explorar o notebook**](notebooks/crop_weed_detection.ipynb) · [**Abrir no Google Colab**](https://colab.research.google.com/github/weirdnessbemygod/yolo-crop-weed-detection/blob/main/notebooks/crop_weed_detection.ipynb)
 
 ## Resultados registrados
 
@@ -31,8 +33,8 @@ Os valores foram extraídos das saídas de teste do notebook. mAP mede a qualida
 
 - Treinamento e avaliação de um detector YOLO com imagens agrícolas anotadas.
 - Execução do treinamento no Google Colab.
-- Integração do detector à interface Streamlit do FarmTech360.
-- Exibição de imagens anotadas e contagem de detecções por classe.
+- Preparação dos pesos e das saídas do detector para integração à aplicação da equipe.
+- Geração de imagens anotadas para inspeção das detecções.
 - Organização do fluxo de trabalho em notebook e versionamento com Git e GitHub.
 
 ## Dados utilizados
@@ -77,10 +79,10 @@ Fonte do CornWeed e acesso aos metadados de autoria e licença registrados no no
 | Python | Execução do fluxo de visão computacional |
 | YOLO / Ultralytics | Treinamento e detecção de objetos |
 | Google Colab | Ambiente de treinamento com GPU |
-| Streamlit | Interface para analisar imagens |
+| Streamlit | Interface do projeto em equipe à qual o detector foi destinado |
 | Git e GitHub | Versionamento do trabalho |
 
-## Da imagem à detecção
+## Fluxo da solução em equipe
 
 1. O usuário envia uma imagem agrícola ao aplicativo.
 2. O modelo detecta regiões das classes `crop` e `weed`.
@@ -94,14 +96,14 @@ O desempenho depende das condições da imagem e da semelhança com os dados uti
 | Material | Situação |
 | --- | --- |
 | Apresentação do projeto | Disponível neste README |
-| Notebook de treinamento e avaliação | [Disponível](notebooks/FarmTech360_YOLO.ipynb) |
+| Notebook de treinamento e avaliação | [Disponível](notebooks/crop_weed_detection.ipynb) |
 | Exemplos de imagens com detecções | A adicionar |
 | Métricas e configurações dos experimentos | Disponíveis neste README e nas saídas do notebook |
 | Instruções de execução e acesso aos pesos | A adicionar |
 
 ## Como explorar e executar
 
-1. Consulte as etapas e os resultados no [notebook](notebooks/FarmTech360_YOLO.ipynb).
+1. Consulte as etapas e os resultados no [notebook](notebooks/crop_weed_detection.ipynb).
 2. Para executar, abra no Colab e selecione um ambiente com GPU.
 3. O experimento inicial requer o `Dataset.zip` original, contendo `datasets/weed_crop_cc0`. Esse arquivo deve ser fornecido pelo usuário.
 4. O experimento CornWeed pode ser iniciado em uma sessão própria a partir de sua seção de inspeção. A primeira célula dessa seção instala as dependências, e as seguintes baixam os dados e verificam o checksum.
@@ -111,6 +113,6 @@ A edição publicada conserva resultados textuais selecionados da execução ori
 
 ## Contexto e autoria
 
-**Beatriz Barreto Pinto** · estudante de Inteligência Artificial na FIAP.
+**Beatriz Barreto Pinto** · estudante de Inteligência Artificial em uma instituição de ensino superior.
 
-O FarmTech360 é um projeto acadêmico em equipe. Este portfólio destaca minha participação no componente de visão computacional. A origem dos dados e as condições de uso dos arquivos serão documentadas junto aos materiais publicados.
+O trabalho completo foi desenvolvido em equipe. Este repositório apresenta a parte de visão computacional sob minha responsabilidade. O nome Deméter foi adotado apenas para o portfólio. A instituição, a equipe e eventuais organizações vinculadas à atividade são apresentadas de forma genérica.
