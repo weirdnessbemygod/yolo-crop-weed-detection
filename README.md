@@ -1,118 +1,111 @@
 <div align="center">
 
-# crop & weed detection
+# animal vision
 
-**Visão computacional aplicada à agricultura**
+**Detecção de gatos e cachorros com YOLOv5**
 
-Detecção de plantas cultivadas e plantas daninhas com YOLO e Python.
-
-Projeto acadêmico em equipe · componente de visão computacional
+Projeto acadêmico individual · Python · PyTorch · Visão computacional
 
 </div>
 
 ## O projeto
 
-O detector identifica duas classes em imagens agrícolas, `crop` (planta cultivada) e `weed` (planta daninha). A proposta é apoiar a inspeção visual de áreas de cultivo, destacando as regiões detectadas e apresentando a quantidade de ocorrências por classe.
+Desenvolvi este estudo individual para explorar a identificação e a localização de gatos e cachorros em imagens. O trabalho reúne preparação de dados, anotação de caixas, dois treinamentos supervisionados, seleção de modelo por validação e avaliação em imagens reservadas para teste.
 
-**Deméter é um nome fictício utilizado nesta apresentação.** O trabalho foi desenvolvido em equipe para uma disciplina de graduação. O contexto é uma solução acadêmica para apoiar a inspeção de plantas cultivadas e daninhas em imagens agrícolas. Minha responsabilidade foi desenvolver o componente de visão computacional e entregar o modelo à equipe.
+O nome **Animal Vision** foi adotado para a apresentação do portfólio. O cenário de monitoramento é ilustrativo.
 
-O notebook reúne dois experimentos com modelos treinados separadamente e resultados de teste registrados.
+[**Ver notebook e figuras**](notebooks/animal_detection.ipynb) · [**Abrir no Google Colab**](https://colab.research.google.com/github/weirdnessbemygod/yolo-crop-weed-detection/blob/main/notebooks/animal_detection.ipynb)
 
-[**Explorar o notebook**](notebooks/crop_weed_detection.ipynb) · [**Abrir no Google Colab**](https://colab.research.google.com/github/weirdnessbemygod/yolo-crop-weed-detection/blob/main/notebooks/crop_weed_detection.ipynb)
+## O que fiz
 
-## Resultados registrados
+- Preparei um conjunto de 80 imagens de gatos e cachorros.
+- Anotei os objetos no Make Sense AI e organizei os rótulos no formato YOLO.
+- Conferi a correspondência entre imagens, anotações e códigos das classes.
+- Treinei YOLOv5s em experimentos independentes de 30 e 60 épocas.
+- Selecionei os pesos pelo desempenho na validação e avaliei o modelo no teste.
+- Analisei imagens com detecções, incluindo falhas de localização e de classe.
+- Comparei de forma exploratória o detector customizado, os pesos COCO e uma CNN implementada em PyTorch.
 
-| Experimento | Imagens de teste | Precisão | Recall | mAP@50 | mAP@50–95 |
+## Dataset
+
+| Conjunto | Gatos | Cachorros | Imagens |
+| --- | ---: | ---: | ---: |
+| Treino | 32 | 32 | 64 |
+| Validação | 4 | 4 | 8 |
+| Teste | 4 | 4 | 8 |
+| **Total** | **40** | **40** | **80** |
+
+Classes do detector customizado: **0 = gato** e **1 = cachorro**.
+
+## Experimentos YOLOv5s
+
+Ambos os treinamentos começaram com pesos pré-treinados, imagens de 640 pixels, batch 16 e seed 42. A execução registrada utilizou uma GPU Tesla T4.
+
+A tabela abaixo corresponde à avaliação dos arquivos `best.pt` na validação.
+
+| Treinamento | Precisão | Recall | mAP@0.5 | mAP@0.5:0.95 | Tempo do treino |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Dataset inicial | 130 | 80,8% | 78,2% | **84,8%** | 55,1% |
-| CornWeed | 1.054 | 82,2% | 83,3% | **83,3%** | 50,1% |
+| 30 épocas | 84,5% | 100% | 97,0% | 68,6% | 2,07 min |
+| 60 épocas | 96,8% | 100% | 99,5% | 78,7% | 3,51 min |
 
-Os valores foram extraídos das saídas de teste do notebook. mAP mede a qualidade das detecções e não representa uma porcentagem geral de acerto. Os experimentos usam bases e divisões diferentes, portanto esses valores não constituem uma comparação controlada entre modelos.
+O modelo de 60 épocas foi selecionado pelo mAP@0.5:0.95 na validação.
 
-## Minha contribuição
+## Resultado final no teste
 
-- Treinamento e avaliação de um detector YOLO com imagens agrícolas anotadas.
-- Execução do treinamento no Google Colab.
-- Preparação dos pesos e das saídas do detector para integração à aplicação da equipe.
-- Geração de imagens anotadas para inspeção das detecções.
-- Organização do fluxo de trabalho em notebook e versionamento com Git e GitHub.
+Avaliação do modelo selecionado em **8 imagens com 8 instâncias anotadas**.
 
-## Dados utilizados
+| Classe | Precisão | Recall | mAP@0.5 | mAP@0.5:0.95 |
+| --- | ---: | ---: | ---: | ---: |
+| Gato | 95,5% | 75,0% | 91,2% | 59,8% |
+| Cachorro | 71,7% | 100% | 99,5% | 82,1% |
+| **Geral** | **83,6%** | **87,5%** | **95,3%** | **70,9%** |
 
-O primeiro experimento utiliza **1.300 imagens**, separadas em treino, validação e teste.
+mAP avalia detecção de objetos e não representa acurácia global de classificação. Os resultados foram extraídos das saídas registradas no notebook.
 
-| Partição | Imagens |
-| --- | ---: |
-| Treino | 1.040 |
-| Validação | 130 |
-| Teste | 130 |
-| **Total** | **1.300** |
+O painel de teste está disponível no notebook. A inspeção mostra um gato sem detecção e outro classificado como cachorro. Os exemplos tornam visíveis as limitações do modelo mesmo com um mAP elevado.
 
-| ID | Classe | Descrição |
+## Comparação complementar
+
+| Abordagem | Tarefa e avaliação registrada | Resultado |
 | --- | --- | --- |
-| 0 | `crop` | Planta cultivada |
-| 1 | `weed` | Planta daninha |
+| YOLOv5s customizado | Detecção com caixas, avaliada por mAP | mAP@0.5 de 95,3% |
+| YOLOv5s pré-treinado no COCO | Identificação pela classe da detecção de maior confiança | 7 acertos em 8 imagens |
+| CNN treinada do zero | Classificação global de imagem | 5 acertos em 8 imagens |
 
-As anotações delimitam os objetos com caixas retangulares no formato YOLO. O conjunto de teste fica reservado para avaliar o modelo em imagens separadas do treinamento.
+As avaliações têm critérios diferentes. Elas não constituem um ranking diretamente comparável. A avaliação do modelo COCO considera identificação de classe, sem medir a sobreposição das caixas.
 
-O segundo experimento utiliza o **CornWeed**, com 2.015 imagens de treino, 505 de validação e 1.054 de teste. Os rótulos originais foram convertidos para `0 = crop` (milho) e `1 = weed`. O notebook inclui inspeção das anotações, auditoria de duplicatas e análise de similaridade visual.
+A CNN utiliza três blocos convolucionais, camadas densas, dropout e otimizador Adam. Foi treinada por 25 épocas com as 64 imagens de treino.
 
-A separação do CornWeed considera sequências e datas de aquisição, mas a independência espacial não foi comprovada. Foram encontrados quatro pares visualmente semelhantes entre treino e validação pelo critério pHash utilizado. Esses limites devem acompanhar a interpretação dos resultados.
+## Executar
 
-Fonte do CornWeed e acesso aos metadados de autoria e licença registrados no notebook: [Zenodo, DOI 10.5281/zenodo.7961764](https://zenodo.org/records/7961764). As imagens do dataset não estão incluídas neste repositório.
+1. Abra o notebook no Colab com GPU ou em um ambiente Jupyter com PyTorch instalado.
+2. Prepare a pasta `animal_vision_data` com a estrutura abaixo.
+3. Execute as células em ordem. A primeira célula procura os dados no Colab, no Drive ou na pasta de execução local. Um caminho personalizado pode ser definido na variável de ambiente `ANIMAL_VISION_DATA`.
+4. O notebook instala as dependências do repositório oficial do YOLOv5 e registra seu commit.
+5. Ao terminar, salve os pesos, gráficos e relatórios produzidos.
 
-## Configuração dos experimentos
-
-| Parâmetro | Dataset inicial | CornWeed |
-| --- | --- | --- |
-| Modelo inicial declarado | YOLOv8n pré-treinado | YOLOv8n pré-treinado |
-| Épocas | 20 | Até 30, encerrado na 26 por early stopping |
-| Tamanho de imagem | 512 | 640 |
-| Batch | 8 | 8 |
-| Seed | 42 | 42 |
-| GPU da execução registrada | Tesla T4 | Tesla T4 |
-
-## Tecnologias
-
-| Ferramenta | Aplicação no projeto |
+| Caminho na pasta de dados | Conteúdo |
 | --- | --- |
-| Python | Execução do fluxo de visão computacional |
-| YOLO / Ultralytics | Treinamento e detecção de objetos |
-| Google Colab | Ambiente de treinamento com GPU |
-| Streamlit | Interface do projeto em equipe à qual o detector foi destinado |
-| Git e GitHub | Versionamento do trabalho |
+| `TREINO/` | 64 imagens |
+| `VALIDAÇÃO/` | 8 imagens |
+| `TESTE/` | 8 imagens |
+| `rotulos_treino_corrigidos.zip` | Anotações de treino |
+| `rotulos_validacao_corrigidos.zip` | Anotações de validação |
+| `rotulos_teste_corrigidos.zip` | Anotações de teste |
 
-## Fluxo da solução em equipe
+Os arquivos de imagem e anotação devem ter nomes-base correspondentes, iniciados por `gato` ou `cachorro`, conforme a classe. Dataset e pesos devem ser fornecidos pelo usuário.
 
-1. O usuário envia uma imagem agrícola ao aplicativo.
-2. O modelo detecta regiões das classes `crop` e `weed`.
-3. A interface apresenta a imagem com as caixas e os rótulos.
-4. As contagens ajudam a localizar ocorrências para inspeção.
+O commit do YOLOv5 registrado na execução original é `402e17ddf820996f51a191cbb798376e1144f069`. O procedimento de instalação do notebook clona o repositório oficial disponível no momento da execução, portanto uma nova instalação pode usar outra versão.
 
-O desempenho depende das condições da imagem e da semelhança com os dados utilizados no treinamento.
+## Limitações e estado desta edição
 
-## Conteúdo do portfólio
+- O teste possui apenas quatro imagens por classe. É necessário ampliar e diversificar os dados para investigar generalização.
+- Os tempos foram medidos por rotinas diferentes e não constituem um benchmark controlado de latência ou FPS. A medição da CNN em GPU não usa sincronização explícita.
+- As figuras e os resultados são da execução original enviada pela autora. As figuras foram compactadas para facilitar a leitura no GitHub.
+- Esta edição adapta nomes, apresentação e configuração dos caminhos. O JSON e a sintaxe das células foram conferidos. O treinamento não foi reexecutado nesta revisão.
 
-| Material | Situação |
-| --- | --- |
-| Apresentação do projeto | Disponível neste README |
-| Notebook de treinamento e avaliação | [Disponível](notebooks/crop_weed_detection.ipynb) |
-| Exemplos de imagens com detecções | A adicionar |
-| Métricas e configurações dos experimentos | Disponíveis neste README e nas saídas do notebook |
-| Instruções de execução e acesso aos pesos | A adicionar |
+## Autoria
 
-## Como explorar e executar
+**Beatriz Barreto Pinto** · projeto acadêmico desenvolvido individualmente.
 
-1. Consulte as etapas e os resultados no [notebook](notebooks/crop_weed_detection.ipynb).
-2. Para executar, abra no Colab e selecione um ambiente com GPU.
-3. O experimento inicial requer o `Dataset.zip` original, contendo `datasets/weed_crop_cc0`. Esse arquivo deve ser fornecido pelo usuário.
-4. O experimento CornWeed pode ser iniciado em uma sessão própria a partir de sua seção de inspeção. A primeira célula dessa seção instala as dependências, e as seguintes baixam os dados e verificam o checksum.
-5. Execute as células em ordem dentro do experimento escolhido e baixe os arquivos gerados antes de encerrar a sessão.
-
-A edição publicada conserva resultados textuais selecionados da execução original. Foram removidos widgets, imagens embutidas e logs extensos para facilitar a leitura. Os caminhos com datas fixas foram substituídos por variáveis da sessão. O notebook foi verificado como JSON e teve a sintaxe Python inspecionada, mas esta edição não foi reexecutada com GPU.
-
-## Contexto e autoria
-
-**Beatriz Barreto Pinto** · estudante de Inteligência Artificial em uma instituição de ensino superior.
-
-O trabalho completo foi desenvolvido em equipe. Este repositório apresenta a parte de visão computacional sob minha responsabilidade. O nome Deméter foi adotado apenas para o portfólio. A instituição, a equipe e eventuais organizações vinculadas à atividade são apresentadas de forma genérica.
+Esta apresentação usa identificação genérica para a atividade acadêmica e seu cenário de aplicação.
